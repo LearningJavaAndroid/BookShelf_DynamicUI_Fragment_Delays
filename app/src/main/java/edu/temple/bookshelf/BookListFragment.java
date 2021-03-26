@@ -24,7 +24,7 @@ public class BookListFragment extends Fragment {
 
 
     private int mColumnCount = 1;
-    private BookList bookList;
+    private BookList bookList = new BookList();
     ItemListFragmentInterface parentActivity;
 
     /**
@@ -37,10 +37,10 @@ public class BookListFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static BookListFragment newInstance(BookList bookList) {
+    public static BookListFragment newInstance(BookList booklist) {
         BookListFragment fragment = new BookListFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("list", bookList.bookList);
+        args.putParcelableArrayList("list", booklist.bookList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,9 +72,9 @@ public class BookListFragment extends Fragment {
         ListView view = (ListView) inflater.inflate(R.layout.fragment_book_list_view, container, false);
 
         // Set the adapter
-        if(getActivity() != null){
-            view.setAdapter(new BookAdapter(getActivity(), bookList));
-        }
+
+        view.setAdapter(new BookAdapter(getActivity(), bookList));
+
 
         view.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

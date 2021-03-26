@@ -1,7 +1,9 @@
 package edu.temple.bookshelf;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -19,7 +21,7 @@ import edu.temple.bookshelf.R;
  * Use the {@link BookDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookDetailFragment extends Fragment{
+public class BookDetailFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,11 +30,12 @@ public class BookDetailFragment extends Fragment{
     private static final String imageParam = "param3";
 
     // TODO: Rename and change types of parameters
-    ImageView imageView;
+    ImageView imageView ;
     TextView textViewBook;
-    TextView textViewAuthor;
+    TextView textViewAuthor ;
     //static BookDetailFragment fragment;
-    Book book;
+    Book book ;
+    ItemDetailFragmentInterface parentActivity;
 
     public BookDetailFragment() {
         // Required empty public constructor
@@ -45,12 +48,27 @@ public class BookDetailFragment extends Fragment{
         fragment.setArguments(args);
         return fragment;
     }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if(context instanceof BookDetailFragment.ItemDetailFragmentInterface){ //check if activity has the interface implement
+            parentActivity = (BookDetailFragment.ItemDetailFragmentInterface) context; //storing a reference to parent here in memory
+        }else{ // if not implemented, Tell them to in error
+            throw new RuntimeException("Please Implement the Item List Interface before attaching this fragment");
+        }
+    }
+    @Override
+    public void onDetach() { // on detach is used to stop storing the context parent,
+        // to stop memory leaks required
+        super.onDetach();
+        parentActivity = null;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.book = (Book) getArguments().getParcelable("book");
+            this.book = getArguments().getParcelable("book");
         }
     }
 
@@ -70,12 +88,18 @@ public class BookDetailFragment extends Fragment{
     }
 
     public void displayBook(Book book){
-        imageView.setImageResource(book.image);
-        textViewBook.setText(book.title);
-        textViewAuthor.setText(book.author);
-        textViewBook.setTextSize(30);
-        textViewAuthor.setTextSize(24);
+        imageView.setImageResource(book.getImage());
+        imageView.getLayoutParams().height=50;
+        imageView.getLayoutParams().width=50;
+        textViewBook.setText(book.getTitle());
+        textViewAuthor.setText(book.getAuthor());
+        textViewBook.setTextSize(12);
+        textViewAuthor.setTextSize(8);
         textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
         textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
+    }
+
+    interface ItemDetailFragmentInterface{
+
     }
 }
