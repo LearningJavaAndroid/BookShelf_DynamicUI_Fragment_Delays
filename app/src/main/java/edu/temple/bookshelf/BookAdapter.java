@@ -19,12 +19,12 @@ public class BookAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return bookList.size();
+        return bookList.sizeBookList();
     }
 
     @Override
     public Object getItem(int position) {
-        return bookList.get(position);
+        return bookList.getBook(position);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class BookAdapter extends BaseAdapter {
             Author = (TextView) linearLayout.getChildAt(1);
 
         }
-        BookName.setText(bookList.get(position).title);
-        Author.setText(bookList.get(position).author);
+        BookName.setText(bookList.getBook(position).title);
+        Author.setText(bookList.getBook(position).author);
         return linearLayout;
     }
 }

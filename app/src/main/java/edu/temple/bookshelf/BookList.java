@@ -1,9 +1,12 @@
 package edu.temple.bookshelf;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class BookList implements Serializable {
+public class BookList implements Parcelable {
 
     ArrayList<Book> bookList;
 
@@ -11,6 +14,22 @@ public class BookList implements Serializable {
         bookList = new ArrayList<Book>();
     }
 
+
+    protected BookList(Parcel in) {
+        bookList = in.createTypedArrayList(Book.CREATOR);
+    }
+
+    public static final Creator<BookList> CREATOR = new Creator<BookList>() {
+        @Override
+        public BookList createFromParcel(Parcel in) {
+            return new BookList(in);
+        }
+
+        @Override
+        public BookList[] newArray(int size) {
+            return new BookList[size];
+        }
+    };
 
     public void add(Book book){
         bookList.add(book);
@@ -24,12 +43,21 @@ public class BookList implements Serializable {
         bookList.set(pos, book);
     }
 
-    public Book get(int pos){
-        Book book = bookList.get(pos);
-        return book;
+    public Book getBook(int pos){
+        return bookList.get(pos);
     }
-    public int size(){
+    public int sizeBookList(){
         return bookList.size();
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(bookList);
+    }
 }

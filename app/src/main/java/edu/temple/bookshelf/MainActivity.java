@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     BookListFragment listFragment;
     BookDetailFragment bookDetailFragment;
     Boolean container2present;
+    FragmentManager fragmentManager;
+    Book book;
 
 
 
@@ -20,25 +22,24 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        fragmentManager = getSupportFragmentManager();
         container2present = findViewById(R.id.container2) != null;
 
-        if(savedInstanceState == null){ // first initialize
+        if(savedInstanceState == null) { // first initialize
             list = new BookList();
             createBooklists();
-            listFragment = new BookListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container1, listFragment.newInstance(list))
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container1, listFragment = BookListFragment.newInstance(list))
                     .commit();
         }
 
+
         if(container2present){ //if landscape just make empty detail frag once
-            bookDetailFragment = new BookDetailFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container2, bookDetailFragment);
+            book = new Book("Book Title","Book Author",R.drawable.ic_launcher_background);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container2, bookDetailFragment = BookDetailFragment.newInstance(book))
+                    .commit();
         }
-
-
 
 
     }
@@ -62,13 +63,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     public void itemClicked(int position) {// onclick for container list one
         if (!container2present) { // if its not in landscape, keep making then replacing fragments
-            bookDetailFragment = BookDetailFragment.newInstance(list.get(position));
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container1, bookDetailFragment)
-                    .addToBackStack(null)
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container1, bookDetailFragment = BookDetailFragment.newInstance(list.getBook(position)))
                     .commit();
         }else{ // when its in landscape , two fragments present
-            bookDetailFragment.displayBook(list.get(position));
+            System.out.println(position);
+            bookDetailFragment.displayBook(list.getBook(position));
         }
 
     }

@@ -31,6 +31,7 @@ public class BookDetailFragment extends Fragment{
     ImageView imageView;
     TextView textViewBook;
     TextView textViewAuthor;
+    //static BookDetailFragment fragment;
     Book book;
 
     public BookDetailFragment() {
@@ -40,7 +41,7 @@ public class BookDetailFragment extends Fragment{
     public static BookDetailFragment newInstance(Book book) {
         BookDetailFragment fragment = new BookDetailFragment();
         Bundle args = new Bundle();
-        args.putSerializable("book", book);
+        args.putParcelable("book", book);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,7 +50,7 @@ public class BookDetailFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.book = (Book) getArguments().getSerializable("book");
+            this.book = (Book) getArguments().getParcelable("book");
         }
     }
 
@@ -62,7 +63,7 @@ public class BookDetailFragment extends Fragment{
         this.textViewBook = layout.findViewById(R.id.Book);
         this.textViewAuthor = layout.findViewById(R.id.author);
 
-        if(layout!= null){
+        if(this.book != null){
             displayBook(book);
         }
         return layout;
