@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     BookList list;
     BookDetailFragment bookDetailFragment;
     Boolean container2present;
+    BookListFragment bookListFragment;
     Book book;
     int[] images;
 
@@ -32,9 +33,10 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         if (!(getSupportFragmentManager().findFragmentById(R.id.container1) instanceof BookListFragment)) { //do we have list frag in container 1 yet
             System.out.println("==============Line: 34==================");
+            getSupportFragmentManager().popBackStackImmediate();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container1, BookListFragment.newInstance(list))
+                    .add(R.id.container1, bookListFragment.newInstance(list))
                     .commit();
         }
 
@@ -61,12 +63,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 System.out.println("==============Line: 75==================");
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container1, bookDetailFragment.newInstance(list.getBook(position)))
-                        .addToBackStack(null)
+                        .addToBackStack("detail")
                         .commit();
             //}
 
         }else{ // when its in landscape , two fragments present
-            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt a bookdetial frag yet
+            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt a bookdetail frag yet
                 System.out.println("==============Line: 82==================");
                 bookDetailFragment = new BookDetailFragment();
                 //book = new Book("Book Title","Book Author",R.drawable.ic_launcher_background);
