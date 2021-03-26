@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import edu.temple.bookshelf.R;
 
 /**
@@ -17,7 +19,7 @@ import edu.temple.bookshelf.R;
  * Use the {@link BookDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookDetailFragment extends Fragment {
+public class BookDetailFragment extends Fragment{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,31 +28,19 @@ public class BookDetailFragment extends Fragment {
     private static final String imageParam = "param3";
 
     // TODO: Rename and change types of parameters
-    private String BookName;
-    private String Author;
-    private int Images;
     ImageView imageView;
     TextView textViewBook;
     TextView textViewAuthor;
+    Book book;
+
     public BookDetailFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BookDetailFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static BookDetailFragment newInstance(Book book) {
         BookDetailFragment fragment = new BookDetailFragment();
         Bundle args = new Bundle();
-        args.putString(BookNameParam, book.title);
-        args.putString(AuthorParam, book.author);
-        args.putInt(imageParam,book.image);
+        args.putSerializable("book", book);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,9 +49,7 @@ public class BookDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            BookName = getArguments().getString(BookNameParam);
-            Author = getArguments().getString(AuthorParam);
-            Images = getArguments().getInt(imageParam);
+            this.book = (Book) getArguments().getSerializable("book");
         }
     }
 
@@ -70,10 +58,13 @@ public class BookDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View layout = inflater.inflate(R.layout.fragment_book_detail, container, false);
-        ImageView imageView = layout.findViewById(R.id.imageView);
-        TextView textViewBook = layout.findViewById(R.id.Book);
-        TextView textViewAuthor = layout.findViewById(R.id.author);
+        this.imageView = layout.findViewById(R.id.imageView);
+        this.textViewBook = layout.findViewById(R.id.Book);
+        this.textViewAuthor = layout.findViewById(R.id.author);
 
+        if(layout!= null){
+            displayBook(book);
+        }
         return layout;
     }
 
@@ -81,5 +72,9 @@ public class BookDetailFragment extends Fragment {
         imageView.setImageResource(book.image);
         textViewBook.setText(book.title);
         textViewAuthor.setText(book.author);
+        textViewBook.setTextSize(30);
+        textViewAuthor.setTextSize(24);
+        textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
     }
 }

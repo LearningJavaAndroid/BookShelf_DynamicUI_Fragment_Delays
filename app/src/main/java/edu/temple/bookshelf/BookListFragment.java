@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import edu.temple.bookshelf.R;
@@ -56,10 +57,19 @@ public class BookListFragment extends Fragment {
                 .beginTransaction()
                 .add(R.id.container2, bookDetailFragment).commit();*/
         // Set the adapter
-
         view.setAdapter(new BookAdapter(getActivity(), bookList));
 
+        view.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                ((ItemListFragmentInterface) getActivity()).itemClicked(position);
+            }
+        });
+
         return view;
+    }
+    interface ItemListFragmentInterface{
+        public void itemClicked(int position);
     }
 
 

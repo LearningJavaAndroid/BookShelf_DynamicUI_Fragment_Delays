@@ -1,37 +1,49 @@
 package edu.temple.bookshelf;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.widget.ListView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface {
 
     BookList list;
     BookListFragment listFragment;
     BookDetailFragment bookDetailFragment;
+    Boolean container2present;
 
-    int column = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        list = new BookList();
-        createBooklists();
-        listFragment = BookListFragment.newInstance(list);
+        container2present = findViewById(R.id.container2) != null;
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.container1, listFragment) // put arguements instead the new ImageFragment()
-                .add(R.id.container1, bookDetailFragment)
-                //add the next fragment here
-                .commit();
+        if(savedInstanceState == null){ // first initialize
+            list = new BookList();
+            createBooklists();
+            listFragment = new BookListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container1, listFragment.newInstance(list))
+                    .commit();
+        }
+
+        if(container2present){ //if landscape just make empty detail frag once
+            bookDetailFragment = new BookDetailFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container2, bookDetailFragment);
+        }
+
+
 
 
     }
 
-    public void createBooklists() {
+    public void createBooklists() { // initialize data
 
         //all arrays are 10 in size/length
         String[] BookName = getResources().getStringArray(R.array.Book);
@@ -47,4 +59,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void itemClicked(int position) {// onclick for container list one
+        if (!container2present) { // if its not in landscape, keep making then replacing fragments
+            bookDetailFragment = BookDetailFragment.newInstance(list.get(position));
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container1, bookDetailFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }else{ // when its in landscape , two fragments present
+            bookDetailFragment.displayBook(list.get(position));
+        }
+
+    }
 }
