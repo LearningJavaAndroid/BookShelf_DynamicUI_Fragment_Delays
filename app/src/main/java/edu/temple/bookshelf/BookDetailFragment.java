@@ -33,7 +33,6 @@ public class BookDetailFragment extends Fragment {
     ImageView imageView ;
     TextView textViewBook;
     TextView textViewAuthor ;
-    //static BookDetailFragment fragment;
     Book book ;
     ItemDetailFragmentInterface parentActivity;
 
@@ -81,6 +80,7 @@ public class BookDetailFragment extends Fragment {
         this.textViewBook = layout.findViewById(R.id.Book);
         this.textViewAuthor = layout.findViewById(R.id.author);
 
+
         if(this.book != null){
             displayBook(book);
         }
@@ -88,15 +88,14 @@ public class BookDetailFragment extends Fragment {
     }
 
     public void displayBook(Book book){
+        textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
         imageView.setImageResource(book.getImage());
-        imageView.getLayoutParams().height=50;
-        imageView.getLayoutParams().width=50;
         textViewBook.setText(book.getTitle());
         textViewAuthor.setText(book.getAuthor());
         textViewBook.setTextSize(12);
-        textViewAuthor.setTextSize(8);
-        textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
+        textViewAuthor.setTextSize(12);
+
     }
 
     interface ItemDetailFragmentInterface{

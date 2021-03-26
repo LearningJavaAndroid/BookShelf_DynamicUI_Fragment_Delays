@@ -25,30 +25,62 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         images = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10,};
 
         container2present = findViewById(R.id.container2) != null;
-        System.out.println("line: 30");
+
         list = new BookList();
         createBooklists();
 
-        if(!(getSupportFragmentManager().findFragmentById(R.id.container1) instanceof BookListFragment)) {
-            System.out.println("line: 35");
+
+        if (!(getSupportFragmentManager().findFragmentById(R.id.container1) instanceof BookListFragment)) { //do we have list frag in container 1 yet
+            System.out.println("==============Line: 34==================");
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container1, BookListFragment.newInstance(list))
                     .commit();
         }
+
+
         if(container2present){ //if landscape just make empty detail frag once
-            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){
+            System.out.println("==============Line: 42==================");
+            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt one detail frag created
+                System.out.println("==============Line: 44==================");
                 bookDetailFragment = new BookDetailFragment();
-                book = new Book("Book Title","Book Author",R.drawable.ic_launcher_background);
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container2, bookDetailFragment)
                         .commit();
+            }else{
+                // if there is a detail frag there
             }
         }
-        System.out.println("line:51");
+        System.out.println("===============line:51===================");
 
     }
 
+    @Override
+    public void itemClicked(int position) {// onclick for container list one
+        if (!container2present) { // if its not in landscape, keep making them replacing fragments
+            //if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){
+                System.out.println("==============Line: 75==================");
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container1, bookDetailFragment.newInstance(list.getBook(position)))
+                        .addToBackStack(null)
+                        .commit();
+            //}
+
+        }else{ // when its in landscape , two fragments present
+            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt a bookdetial frag yet
+                System.out.println("==============Line: 82==================");
+                bookDetailFragment = new BookDetailFragment();
+                //book = new Book("Book Title","Book Author",R.drawable.ic_launcher_background);
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container2, bookDetailFragment.newInstance(list.getBook(position)))
+                        .commit();
+            }else{
+                bookDetailFragment.displayBook(list.getBook(position));
+            }
+
+        }
+
+    }
     public void createBooklists() { // initialize data
 
         //all arrays are 10 in size/length
@@ -61,28 +93,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             Book book = new Book(BookName[i], BookAuthor[i], images[i]);
             list.add(book);
             i++;
-        }
-
-    }
-
-    @Override
-    public void itemClicked(int position) {// onclick for container list one
-        if (!container2present) { // if its not in landscape, keep making then replacing fragments
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container1, BookDetailFragment.newInstance(list.getBook(position)))
-                    .addToBackStack(null)
-                    .commit();
-        }else{ // when its in landscape , two fragments present
-            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt a bookdetial frag yet
-                bookDetailFragment = new BookDetailFragment();
-                book = new Book("Book Title","Book Author",R.drawable.ic_launcher_background);
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container2, BookDetailFragment.newInstance(book))
-                        .commit();
-            }
-
-            //detailfrag is null
-            bookDetailFragment.displayBook(list.getBook(position));
         }
 
     }

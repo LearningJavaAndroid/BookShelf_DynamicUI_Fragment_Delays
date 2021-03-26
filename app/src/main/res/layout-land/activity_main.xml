@@ -9,15 +9,15 @@
     <FrameLayout
         android:id="@+id/container1"
         android:layout_width="251dp"
-        android:layout_height="413dp"
+        android:layout_height="391dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/container2"
-        android:layout_width="479dp"
-        android:layout_height="415dp"
+        android:layout_width="555dp"
+        android:layout_height="396dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/container1"
