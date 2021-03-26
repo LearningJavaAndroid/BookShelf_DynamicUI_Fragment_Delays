@@ -1,9 +1,13 @@
 package edu.temple.bookshelf;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -88,13 +92,20 @@ public class BookDetailFragment extends Fragment {
     }
 
     public void displayBook(Book book){
+
         textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
         textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
         imageView.setImageResource(book.getImage());
         textViewBook.setText(book.getTitle());
         textViewAuthor.setText(book.getAuthor());
-        textViewBook.setTextSize(12);
-        textViewAuthor.setTextSize(12);
+        textViewBook.setTextSize(30);
+        textViewAuthor.setTextSize(24);
+        textViewBook.setTextSize(25);
+        textViewAuthor.setTextSize(20);
+        textViewAuthor.setPadding(0,0,0,0);
+        textViewBook.setPadding(0,0,0,0);
+
+
 
     }
 

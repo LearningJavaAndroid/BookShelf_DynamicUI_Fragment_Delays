@@ -47,9 +47,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 getSupportFragmentManager().beginTransaction()
                         .add(R.id.container2, bookDetailFragment)
                         .commit();
-            }else{
-                // if there is a detail frag there
             }
+
         }
         System.out.println("===============line:51===================");
 
