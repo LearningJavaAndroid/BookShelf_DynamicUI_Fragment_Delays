@@ -1,18 +1,14 @@
 package edu.temple.bookshelf;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface, BookDetailFragment.ItemDetailFragmentInterface{
 
     BookList list;
     BookDetailFragment bookDetailFragment;
     Boolean container2present;
-    BookListFragment bookListFragment;
     Book book;
     int[] images;
 
@@ -27,16 +23,17 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         container2present = findViewById(R.id.container2) != null;
 
-        list = new BookList();
-        createBooklists();
+        if(list ==null){
+            list = new BookList();
+            createBooklists();
+        }
 
-
-        if (!(getSupportFragmentManager().findFragmentById(R.id.container1) instanceof BookListFragment)) { //do we have list frag in container 1 yet
+        if (!(getSupportFragmentManager().findFragmentById(R.id.container) instanceof BookListFragment)) { //do we have list frag in container 1 yet
             System.out.println("==============Line: 34==================");
             getSupportFragmentManager().popBackStackImmediate();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .add(R.id.container1, bookListFragment.newInstance(list))
+                    .replace(R.id.container, BookListFragment.newInstance(list))
                     .commit();
         }
 
@@ -62,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             //if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){
                 System.out.println("==============Line: 75==================");
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container1, bookDetailFragment.newInstance(list.getBook(position)))
+                        .replace(R.id.container, bookDetailFragment.newInstance(list.getBook(position)))
                         .addToBackStack("detail")
                         .commit();
             //}

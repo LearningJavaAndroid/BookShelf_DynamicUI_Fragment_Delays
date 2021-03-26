@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:id="@+id/container1"
+        android:id="@+id/container"
         android:layout_width="251dp"
         android:layout_height="391dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,6 +20,6 @@
         android:layout_height="396dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/container1"
+        app:layout_constraintStart_toEndOf="@+id/container"
         app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

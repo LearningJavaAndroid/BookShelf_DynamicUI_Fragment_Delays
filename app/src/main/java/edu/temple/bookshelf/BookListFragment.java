@@ -62,9 +62,11 @@ public class BookListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            this.bookList.bookList =  getArguments().getParcelableArrayList("list");
-        }
+            if (getArguments() != null) {
+                this.bookList.bookList =  getArguments().getParcelableArrayList("list");
+            }
+
+
     }
 
     @Override

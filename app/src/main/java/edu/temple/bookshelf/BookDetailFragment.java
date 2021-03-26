@@ -70,9 +70,12 @@ public class BookDetailFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            this.book = getArguments().getParcelable("book");
-        }
+
+            if (getArguments() != null) {
+                this.book = getArguments().getParcelable("book");
+            }
+
+
     }
 
     @Override
