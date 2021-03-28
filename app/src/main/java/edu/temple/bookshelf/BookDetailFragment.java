@@ -149,14 +149,14 @@ public class BookDetailFragment extends Fragment implements Parcelable {
 
     }
 
-    public void displayBook1(Book Book) {
+    /*public void displayBook1(Book Book) {
         //this.setRescources = true;
         this.book = Book;
         imageView.setImageResource(Book.getImage());
         textViewBook.setText(Book.getTitle());
         textViewAuthor.setText(Book.getAuthor());
         this.setRescources = true;
-    }
+    }*/
 
     @Override
     public int describeContents() {

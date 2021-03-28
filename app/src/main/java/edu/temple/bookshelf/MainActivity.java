@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             list = savedInstanceState.getParcelable("list");
             bookListFragment = savedInstanceState.getParcelable("listfrag");
             bookDetailFragment = savedInstanceState.getParcelable("detailfrag");
-            //Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.author, Toast.LENGTH_SHORT).show();
             Log.d("log_tag", "container2present = " + container2present );
             if(container2present){ // if landscape,
                     if(bookDetailFragment != null){ //if bookDetail is not null, there is one data saved, it could still be blank
                         if(bookDetailFragment.setRescources){
+                            Log.d("log_tag", "line 61:");
                             Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.author, Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().popBackStackImmediate();
                             getSupportFragmentManager().beginTransaction()
@@ -69,26 +69,24 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                                 @Override
                                 public void run() {
                                     Log.d("log_tag", "Portrait4: " + original_book.title );
-                                    bookDetailFragment.displayBook1(original_book);
+                                    bookDetailFragment.displayBook(original_book);
                                 }
                             }, 100);
 
                         }else{
-
+                            Log.d("log_tag", "line 77:");
                             bookDetailFragment = new BookDetailFragment();
                             getSupportFragmentManager().beginTransaction()
                                     .add(R.id.container2, bookDetailFragment)
                                     .commit();
                         }
 
-                        //Toast.makeText(this, "rotate itemClicked", Toast.LENGTH_SHORT).show();
                     }else{ //if it is null, make a blank one
                         bookDetailFragment = new BookDetailFragment();
-
+                        Log.d("log_tag", "line 87:");
                         getSupportFragmentManager().beginTransaction()
-                                .add(R.id.container, bookDetailFragment)
+                                .add(R.id.container2, bookDetailFragment)
                                 .commit();
-                       // Toast.makeText(this, "rotate itemClicked", Toast.LENGTH_SHORT).show();
                     }
             }else{ // if portrait
                 //Log.d("log_tag", "Portrait: " + bookDetailFragment.book.title );
@@ -97,18 +95,16 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 if(bookDetailFragment != null){
                      Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
                     //Log.d("log_tag", "Portrait1: " + bookDetailFragment.book.title );
+                    Log.d("log_tag", "line 100:");
                      if(fragment instanceof BookListFragment) { // if container has list fragment
-                         //bookListFragment = (BookListFragment) fragment; // not sure if i should send fragments through savedstate since
                          //Log.d("log_tag", "Portrait2: " + bookDetailFragment.book.title );
                          if(bookDetailFragment.setRescources){
-                             //Toast.makeText(this, "line: 86 "+bookDetailFragment.book.title, Toast.LENGTH_SHORT).show();
-
+                             Log.d("log_tag", "line 106:");
                              getSupportFragmentManager().popBackStackImmediate();
                              getSupportFragmentManager().beginTransaction()
                                      .replace(R.id.container, bookDetailFragment)
                                      .addToBackStack(null)
                                      .commit();
-                             //Toast.makeText(this, "rotate itemClicked", Toast.LENGTH_SHORT).show();
                              Log.d("log_tag", "Portrait3: " + bookDetailFragment.book.title );
 
                              Book original_book = bookDetailFragment.book;
@@ -116,12 +112,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                                  @Override
                                  public void run() {
                                      Log.d("log_tag", "Portrait4: " + original_book.title );
-                                     bookDetailFragment.displayBook1(original_book);
+                                     bookDetailFragment.displayBook(original_book);
                                  }
-                             }, 100);
+                             }, 50);
                          }else{
+                             Log.d("log_tag", "line 124:");
+                             Toast.makeText(this, "line: 123", Toast.LENGTH_SHORT).show();
                              getSupportFragmentManager().beginTransaction()
-                                     .replace(R.id.container, bookDetailFragment)
+                                     .replace(R.id.container, bookListFragment)
                                      .commit();
                          }
 
@@ -147,15 +145,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     @Override
     public void itemClicked(int position) {// onclick to manipulate bookdetailFragment
-        //Toast.makeText(this, ""+position+ " "+container2present+ " "+(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment), Toast.LENGTH_SHORT).show();
-        if (!container2present) { // if its portrait, keep making them replacing fragments
-            //Toast.makeText(this,  "Line: 117 :"+position,Toast.LENGTH_SHORT).show();
+         if (!container2present) { // if its portrait, keep making them replacing fragments
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, bookDetailFragment = BookDetailFragment.newInstance(list.getBook(position)))
                     .addToBackStack(null)
                     .commit();
             // when item is clicked and add to back stack is called
-
 
         }else{ // when its in landscape , two fragments present
             Fragment fragment = (BookDetailFragment)(getSupportFragmentManager().findFragmentById(R.id.container2));
@@ -163,14 +158,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             Log.d("log_tag", "Landscape Item click1");
 
             if((!bookDetailFragment.setRescources)){ // if there isnt a bookdetail frag yet
-                //Toast.makeText(this,  "Line: 148 :"+position,Toast.LENGTH_SHORT).show();
                 //System.out.println("==============Line: 82==================");
                 Log.d("log_tag", "Landscape Item click2");
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container2, bookDetailFragment = BookDetailFragment.newInstance(list.getBook(position)))
                         .commit();
             }else{ // if there is a bookdetail frag
-                //Toast.makeText(this, "line:135: "+bookDetailFragment.book.author, Toast.LENGTH_SHORT).show();
                 Log.d("log_tag", "Landscape Item click3");
                 if(fragment instanceof BookDetailFragment){
                     //bookDetailFragment = (BookDetailFragment) fragment;
