@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ import edu.temple.bookshelf.R;
  * Use the {@link BookDetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookDetailFragment extends Fragment {
+public class BookDetailFragment extends Fragment implements Parcelable {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,16 +40,34 @@ public class BookDetailFragment extends Fragment {
     TextView textViewBook;
     TextView textViewAuthor ;
     Book book ;
+    boolean setRescources;
     ItemDetailFragmentInterface parentActivity;
 
     public BookDetailFragment() {
         // Required empty public constructor
     }
 
+    protected BookDetailFragment(Parcel in) {
+        book = in.readParcelable(Book.class.getClassLoader());
+    }
+
+    public static final Creator<BookDetailFragment> CREATOR = new Creator<BookDetailFragment>() {
+        @Override
+        public BookDetailFragment createFromParcel(Parcel in) {
+            return new BookDetailFragment(in);
+        }
+
+        @Override
+        public BookDetailFragment[] newArray(int size) {
+            return new BookDetailFragment[size];
+        }
+    };
+
     public static BookDetailFragment newInstance(Book book) {
         BookDetailFragment fragment = new BookDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable("book", book);
+        args.putBoolean("yes",true);
+        args.putParcelable("newbook", book);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,13 +88,26 @@ public class BookDetailFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) { //change saved state so that it saves the things you want it to
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("savebook", book);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if(savedInstanceState == null){ // if there is no saved data
             if (getArguments() != null) {
-                this.book = getArguments().getParcelable("book");
+                this.book =  getArguments().getParcelable("newbook");
+                this.setRescources = getArguments().getBoolean("yes");
             }
-
+        }else { //using saved instance state
+            if (getArguments() != null) {
+                this.book = savedInstanceState.getParcelable("savebook");
+                this.setRescources = true;
+            }
+        }
 
     }
 
@@ -94,22 +127,34 @@ public class BookDetailFragment extends Fragment {
         return layout;
     }
 
-    public void displayBook(Book book){
-
+    public void displayBook(Book Book){
+        //this.setRescources = true;
+        this.book = Book;
         textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
         textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        imageView.setImageResource(book.getImage());
-        textViewBook.setText(book.getTitle());
-        textViewAuthor.setText(book.getAuthor());
+        imageView.setImageResource(Book.getImage());
+        textViewBook.setText(Book.getTitle());
+        textViewAuthor.setText(Book.getAuthor());
         textViewBook.setTextSize(30);
         textViewAuthor.setTextSize(24);
         textViewBook.setTextSize(25);
         textViewAuthor.setTextSize(20);
         textViewAuthor.setPadding(0,0,0,0);
         textViewBook.setPadding(0,0,0,0);
+        this.setRescources = true;
+        //return this;
 
 
+    }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(book, flags);
     }
 
     interface ItemDetailFragmentInterface{

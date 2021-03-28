@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import edu.temple.bookshelf.R;
 /**
  * A fragment representing a list of Items.
  */
-public class BookListFragment extends Fragment {
+public class BookListFragment extends Fragment implements Parcelable{
 
 
     private int mColumnCount = 1;
@@ -34,6 +35,23 @@ public class BookListFragment extends Fragment {
     public BookListFragment() {
 
     }
+
+    protected BookListFragment(Parcel in) {
+        mColumnCount = in.readInt();
+        bookList = in.readParcelable(BookList.class.getClassLoader());
+    }
+
+    public static final Creator<BookListFragment> CREATOR = new Creator<BookListFragment>() {
+        @Override
+        public BookListFragment createFromParcel(Parcel in) {
+            return new BookListFragment(in);
+        }
+
+        @Override
+        public BookListFragment[] newArray(int size) {
+            return new BookListFragment[size];
+        }
+    };
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
@@ -59,13 +77,28 @@ public class BookListFragment extends Fragment {
         super.onDetach();
         parentActivity = null;
     }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("list", bookList.bookList);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            if (getArguments() != null) {
+        if((savedInstanceState == null) && (getArguments() != null)){
                 this.bookList.bookList =  getArguments().getParcelableArrayList("list");
+        }else{
+            if(getArguments() != null){
+                this.bookList.bookList = savedInstanceState.getParcelableArrayList("list");
             }
+        }
 
+
+
+    }
+    public void displayList(BookList list){
 
     }
 
@@ -87,6 +120,18 @@ public class BookListFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mColumnCount);
+        dest.writeParcelable(bookList, flags);
+    }
+
     interface ItemListFragmentInterface{
         public void itemClicked(int position);
     }

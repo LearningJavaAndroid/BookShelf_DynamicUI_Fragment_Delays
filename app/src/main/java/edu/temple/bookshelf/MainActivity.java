@@ -1,15 +1,21 @@
 package edu.temple.bookshelf;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
+import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface, BookDetailFragment.ItemDetailFragmentInterface{
 
     BookList list;
     BookDetailFragment bookDetailFragment;
     Boolean container2present;
-    Book book;
+    BookListFragment bookListFragment;
+    //Book book;
+    int layoutStateBefore = 1; // 1 for portrait, 2 for landscape
     int[] images;
 
 
@@ -23,56 +29,109 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         container2present = findViewById(R.id.container2) != null;
 
-        if(list ==null){
-            list = new BookList();
+        if(savedInstanceState == null){ // if the app first load
+            list = new BookList(); //initialize everything
             createBooklists();
-        }
-
-        if (!(getSupportFragmentManager().findFragmentById(R.id.container) instanceof BookListFragment)) { //do we have list frag in container 1 yet
-            System.out.println("==============Line: 34==================");
-            getSupportFragmentManager().popBackStackImmediate();
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.container, BookListFragment.newInstance(list))
+                    .add(R.id.container, bookListFragment = BookListFragment.newInstance(list))
                     .commit();
-        }
+            if(container2present){ //if landscape just make empty detail frag once
+
+                    bookDetailFragment = new BookDetailFragment();
+
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.container2, bookDetailFragment)
+                            .hide(bookDetailFragment)
+                            .commit();
+
+            }
+        }else{ // if there  is data saved
+            list = savedInstanceState.getParcelable("list");
+            bookListFragment = savedInstanceState.getParcelable("listfrag");
+            bookDetailFragment = savedInstanceState.getParcelable("detailfrag");
+            //Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.author, Toast.LENGTH_SHORT).show();
+            if(container2present){ // if landscape,
+                    if(bookDetailFragment != null){ //if bookDetail is not null, there is one data saved, it could still be blank
+                        if(bookDetailFragment.setRescources){
+                            Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.author, Toast.LENGTH_SHORT).show();
+                            getSupportFragmentManager().popBackStackImmediate();
+                            getSupportFragmentManager().beginTransaction()
+                                    .add(R.id.container2,bookDetailFragment)
+                                    .commit();
+                        }else{
+
+                            bookDetailFragment = new BookDetailFragment();
+                            getSupportFragmentManager().beginTransaction()
+                                    .add(R.id.container2, bookDetailFragment)
+                                    .commit();
+                        }
+
+                        //Toast.makeText(this, "rotate itemClicked", Toast.LENGTH_SHORT).show();
+                    }else{ //if it is null, make a blank one
+                        bookDetailFragment = new BookDetailFragment();
+
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.container2, bookDetailFragment)
+                                .commit();
+                       // Toast.makeText(this, "rotate itemClicked", Toast.LENGTH_SHORT).show();
+                    }
+            }else{ // if portrait
+                // if there is not a detail showing in the container
+                if(bookDetailFragment != null){
+                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+
+                     if(fragment instanceof BookListFragment) { // if container has list fragment
+                         //bookListFragment = (BookListFragment) fragment; // not sure if i should send fragments through savedstate since
+                         if(bookDetailFragment.setRescources){
+                             getSupportFragmentManager().beginTransaction()
+                                     .hide(fragment)
+                                     .add(R.id.container, bookDetailFragment)
+                                     .addToBackStack(null)
+                                     .commit();
+                             //Toast.makeText(this, "rotate itemClicked", Toast.LENGTH_SHORT).show();
+                         }
+
+                     }
+                }
 
 
-        if(container2present){ //if landscape just make empty detail frag once
-            System.out.println("==============Line: 42==================");
-            if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt one detail frag created
-                System.out.println("==============Line: 44==================");
-                bookDetailFragment = new BookDetailFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container2, bookDetailFragment)
-                        .commit();
+
             }
 
         }
-        System.out.println("===============line:51===================");
 
     }
 
     @Override
-    public void itemClicked(int position) {// onclick for container list one
-        if (!container2present) { // if its not in landscape, keep making them replacing fragments
-            //if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){
-                System.out.println("==============Line: 75==================");
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, bookDetailFragment.newInstance(list.getBook(position)))
-                        .addToBackStack("detail")
-                        .commit();
-            //}
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("list",this.list);
+        outState.putParcelable("detailfrag", this.bookDetailFragment);
+        outState.putParcelable("listfrag", this.bookListFragment);
+        //outState.putParcelable("curBook",this.book);
+    }
+
+    @Override
+    public void itemClicked(int position) {// onclick to manipulate bookdetailFragment
+        //Toast.makeText(this, ""+position+ " "+container2present+ " "+(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment), Toast.LENGTH_SHORT).show();
+        if (!container2present) { // if its portrait, keep making them replacing fragments
+            //Toast.makeText(this,  "Line: 117 :"+position,Toast.LENGTH_SHORT).show();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, bookDetailFragment = BookDetailFragment.newInstance(list.getBook(position)))
+                    .addToBackStack(null)
+                    .commit();
+            // when item is clicked and add to back stack is called
+
 
         }else{ // when its in landscape , two fragments present
             if(!(getSupportFragmentManager().findFragmentById(R.id.container2) instanceof BookDetailFragment)){ // if there isnt a bookdetail frag yet
-                System.out.println("==============Line: 82==================");
-                bookDetailFragment = new BookDetailFragment();
-                //book = new Book("Book Title","Book Author",R.drawable.ic_launcher_background);
+                //Toast.makeText(this,  "Line: 148 :"+position,Toast.LENGTH_SHORT).show();
+                //System.out.println("==============Line: 82==================");
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.container2, bookDetailFragment.newInstance(list.getBook(position)))
+                        .add(R.id.container2, bookDetailFragment = BookDetailFragment.newInstance(list.getBook(position)))
                         .commit();
-            }else{
+            }else{ // if there is a bookdetail frag
                 bookDetailFragment.displayBook(list.getBook(position));
             }
 
