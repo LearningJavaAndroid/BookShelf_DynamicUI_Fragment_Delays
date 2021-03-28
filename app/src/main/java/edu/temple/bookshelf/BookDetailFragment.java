@@ -40,7 +40,7 @@ public class BookDetailFragment extends Fragment implements Parcelable {
     TextView textViewBook;
     TextView textViewAuthor ;
     Book book ;
-    boolean setRescources;
+    boolean setRescources = false;
     ItemDetailFragmentInterface parentActivity;
 
     public BookDetailFragment() {
@@ -49,6 +49,7 @@ public class BookDetailFragment extends Fragment implements Parcelable {
 
     protected BookDetailFragment(Parcel in) {
         book = in.readParcelable(Book.class.getClassLoader());
+        setRescources = in.readByte() != 0;
     }
 
     public static final Creator<BookDetailFragment> CREATOR = new Creator<BookDetailFragment>() {
@@ -91,6 +92,7 @@ public class BookDetailFragment extends Fragment implements Parcelable {
     public void onSaveInstanceState(@NonNull Bundle outState) { //change saved state so that it saves the things you want it to
         super.onSaveInstanceState(outState);
         outState.putParcelable("savebook", book);
+        outState.putBoolean("yes", setRescources);
     }
 
     @Override
@@ -105,7 +107,7 @@ public class BookDetailFragment extends Fragment implements Parcelable {
         }else { //using saved instance state
             if (getArguments() != null) {
                 this.book = savedInstanceState.getParcelable("savebook");
-                this.setRescources = true;
+                this.setRescources = savedInstanceState.getBoolean("yes");
             }
         }
 
@@ -127,7 +129,7 @@ public class BookDetailFragment extends Fragment implements Parcelable {
         return layout;
     }
 
-    public void displayBook(Book Book){
+    public BookDetailFragment displayBook(Book Book){
         //this.setRescources = true;
         this.book = Book;
         textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
@@ -142,9 +144,18 @@ public class BookDetailFragment extends Fragment implements Parcelable {
         textViewAuthor.setPadding(0,0,0,0);
         textViewBook.setPadding(0,0,0,0);
         this.setRescources = true;
-        //return this;
+        return this;
 
 
+    }
+
+    public void displayBook1(Book Book) {
+        //this.setRescources = true;
+        this.book = Book;
+        imageView.setImageResource(Book.getImage());
+        textViewBook.setText(Book.getTitle());
+        textViewAuthor.setText(Book.getAuthor());
+        this.setRescources = true;
     }
 
     @Override
@@ -155,7 +166,9 @@ public class BookDetailFragment extends Fragment implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(book, flags);
+        dest.writeByte((byte) (setRescources ? 1 : 0));
     }
+
 
     interface ItemDetailFragmentInterface{
 
