@@ -6,24 +6,31 @@ import android.os.Parcelable;
 import java.io.Serializable;
 
 public class Book implements Parcelable{
+
+    int id;
+    int image;
+    String coverURL;
     String title;
     String author;
-    int image;
 
     public Book(){
 
     }
 
-    public Book(String title, String author, int image){
-        this.title =  title;
+    public Book(String newURL,String title,String author, int id, int image){
+        this.id = id;
+        this.coverURL = newURL;
+        this.title = title;
         this.author = author;
         this.image = image;
     }
 
     protected Book(Parcel in) {
+        id = in.readInt();
+        image = in.readInt();
+        coverURL = in.readString();
         title = in.readString();
         author = in.readString();
-        image = in.readInt();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -38,6 +45,18 @@ public class Book implements Parcelable{
         }
     };
 
+    public String getURL(){
+        return this.coverURL;
+    }
+
+    public int getID(){
+        return this.id;
+    }
+
+    public int getImage(){
+        return this.image;
+    }
+
     public String getTitle(){
         return this.title;
     }
@@ -46,9 +65,6 @@ public class Book implements Parcelable{
         return this.author;
     }
 
-    public int getImage(){
-        return this.image;
-    }
 
     @Override
     public int describeContents() {
@@ -57,8 +73,10 @@ public class Book implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeInt(image);
+        dest.writeString(coverURL);
         dest.writeString(title);
         dest.writeString(author);
-        dest.writeInt(image);
     }
 }
