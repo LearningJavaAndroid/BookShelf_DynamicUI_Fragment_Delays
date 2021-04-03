@@ -209,14 +209,15 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container2, bookDetailFragment = BookDetailFragment.newInstance(list.getBook(position)))
                         .commit();
-            }else{ // if there is a bookdetail frag
+            }else{ // if there is a bookdetail frag in container 2 already, then just do display book
                 Log.d("log_tag", "Landscape Item click3");
                 if(fragment instanceof BookDetailFragment){
                     //bookDetailFragment = (BookDetailFragment) fragment;
                     Log.d("log_tag", "Landscape Item click4");
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container2, bookDetailFragment = bookDetailFragment.displayBook(list.getBook(position)))
-                            .commitNow();
+//                    getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.container2, bookDetailFragment = bookDetailFragment.displayBook(list.getBook(position)))
+//                            .commitNow();
+                    bookDetailFragment = bookDetailFragment.displayBook(list.getBook(position));
                 }
 
                 Toast.makeText(this, ""+bookDetailFragment.book.getTitle(), Toast.LENGTH_SHORT).show();
