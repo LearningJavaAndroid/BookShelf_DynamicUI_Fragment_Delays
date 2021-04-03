@@ -38,14 +38,14 @@ public class BookSearchActivity extends Activity { //make sure to get rid of app
             try {
 
                 JSONArray jsonArray = new JSONArray((String)msg.obj); // json array of json objects
-                ArrayList<JSONObject> objects = new ArrayList<JSONObject>();
+                ArrayList<Book> objects = new ArrayList<Book>();
                 bundle= new Bundle();
-                //JSONObject jsonObject = jsonArray.getJSONObject(0); //convert the array object in the index to a object
                 for(int i =0; i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    objects.add(jsonObject);
+                    Book book = new Book(jsonObject.getString("cover_url"), jsonObject.getString("title"),jsonObject.getString("author"),jsonObject.getInt("id"));
+                    objects.add(book);
                 }
-                bundle.putParcelableArrayList("Objects", (ArrayList<? extends Parcelable>) objects);
+                bundle.putParcelableArrayList("Objects", objects); // might now work here
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("BUNDLE",bundle);
@@ -87,9 +87,9 @@ public class BookSearchActivity extends Activity { //make sure to get rid of app
                     public void run() {
                         try {
                             String urlString = "https://Kamorris.com/lab/cis3515/search.php?term=" + editText.getText().toString();
-                            Log.d("String", "line: 95: "+urlString);
+                            //Log.d("String", "line: 95: "+urlString);
                             URL url = new URL(urlString);
-                            Log.d("String", "onClick: 71");
+                            //Log.d("String", "onClick: 71");
                             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream())); //only good for reading text data
 
                             Message msg = Message.obtain();
@@ -100,7 +100,7 @@ public class BookSearchActivity extends Activity { //make sure to get rid of app
                                 //Log.d("String", "Line: 106");
                                 builder.append(tmpString);
                             }
-                            Log.d("String", "BookSearch Line: 110");
+                            //Log.d("String", "BookSearch Line: 110");
                             msg.obj = builder.toString(); //only reads one line // apply builder here
 
                             handler.sendMessage(msg);

@@ -14,7 +14,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface, BookDetailFragment.ItemDetailFragmentInterface{
 
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         setContentView(R.layout.activity_main);
         Search = findViewById(R.id.SearchButton);
         container2present = findViewById(R.id.container2) != null;
-        images = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10,};
+        //images = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10,};
 
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         if(savedInstanceState == null){ // if the app first load
             list = new BookList(); //initialize everything
-            createBooklists();
+            //createBooklists();
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, bookListFragment = BookListFragment.newInstance(list))
@@ -148,18 +151,16 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { //on return from activity/ custom dialog
         super.onActivityResult(requestCode, resultCode, data);
+        if(data != null){
+            if (requestCode == 111 && resultCode == RESULT_OK) {
+                Bundle bundle = data.getBundleExtra("BUNDLE");
+                ArrayList<Book> objects = bundle.getParcelableArrayList("Objects");
 
-        if (requestCode == 111 && resultCode == RESULT_OK) {
-            Bundle bundle = data.getBundleExtra("BUNDLE");
-            try {
-                LoadImage(bundle.getString("cover_url"));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+
+
             }
-            //Author.setText(bundle.getString("author"));
-            //titleTextView.setText(bundle.getString("title"));
-
         }
+
 
     }
     public void LoadImage(String newURL) throws MalformedURLException {
