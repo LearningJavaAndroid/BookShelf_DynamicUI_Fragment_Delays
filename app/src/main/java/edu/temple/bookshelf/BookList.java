@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class BookList implements Parcelable {
 
-    ArrayList<Book> bookList;
+    private ArrayList<Book> bookList;
 
     public BookList(){
         bookList = new ArrayList<Book>();
@@ -30,6 +30,9 @@ public class BookList implements Parcelable {
             return new BookList[size];
         }
     };
+    public ArrayList getBookList(){
+        return this.bookList;
+    }
 
     public void add(Book book){
         bookList.add(book);
@@ -50,6 +53,9 @@ public class BookList implements Parcelable {
         return bookList.size();
     }
 
+    public void setBookList(ArrayList newBookList){
+        bookList = newBookList;
+    }
 
     @Override
     public int describeContents() {

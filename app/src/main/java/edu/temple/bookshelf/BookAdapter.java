@@ -57,8 +57,8 @@ public class BookAdapter extends BaseAdapter {
             Author = (TextView) linearLayout.getChildAt(1);
 
         }
-        BookName.setText(bookList.getBook(position).title);
-        Author.setText(bookList.getBook(position).author);
+        BookName.setText(bookList.getBook(position).getTitle());
+        Author.setText(bookList.getBook(position).getAuthor());
         return linearLayout;
     }
 }

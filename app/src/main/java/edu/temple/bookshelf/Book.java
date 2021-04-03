@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 public class Book implements Parcelable{
 
-    int id;
+    private int id;
     //int image;
-    String coverURL;
-    String title;
-    String author;
+    private String coverURL;
+    private String title;
+    private String author;
 
     public Book(){ }
 
@@ -51,10 +51,6 @@ public class Book implements Parcelable{
     public int getID(){
         return this.id;
     }
-
-    //public int getImage(){
-        //return this.image;
-    //}
 
     public String getTitle(){
         return this.title;

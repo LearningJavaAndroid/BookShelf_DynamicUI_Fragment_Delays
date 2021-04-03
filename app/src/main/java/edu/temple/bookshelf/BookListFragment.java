@@ -58,7 +58,7 @@ public class BookListFragment extends Fragment implements Parcelable{
     public static BookListFragment newInstance(BookList booklist) {
         BookListFragment fragment = new BookListFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("list", booklist.bookList);
+        args.putParcelableArrayList("list", booklist.getBookList());
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,17 +81,17 @@ public class BookListFragment extends Fragment implements Parcelable{
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("list", bookList.bookList);
+        outState.putParcelableArrayList("list", bookList.getBookList());
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if((savedInstanceState == null) && (getArguments() != null)){
-            this.bookList.bookList =  getArguments().getParcelableArrayList("list");
+            this.bookList.setBookList(getArguments().getParcelableArrayList("list")); //=  getArguments().getParcelableArrayList("list");
         }else{
             if(getArguments() != null){
-                this.bookList.bookList = savedInstanceState.getParcelableArrayList("list");
+                this.bookList.setBookList(savedInstanceState.getParcelableArrayList("list")); //= savedInstanceState.getParcelableArrayList("list");
             }
         }
 

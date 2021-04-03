@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     if(bookDetailFragment != null){ //if bookDetail is not null, there is one data saved, it could still be blank
                         if(bookDetailFragment.setRescources){
                             Log.d("log_tag", "line 61:");
-                            Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.author, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.getAuthor(), Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().popBackStackImmediate();
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.container2,bookDetailFragment)
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Log.d("log_tag", "Portrait4: " + original_book.title );
+                                    Log.d("log_tag", "Portrait4: " + original_book.getTitle() );
                                     bookDetailFragment.displayBook(original_book);
                                 }
                             }, 100);
@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                                      .replace(R.id.container, bookDetailFragment)
                                      .addToBackStack(null)
                                      .commit();
-                             Log.d("log_tag", "Portrait3: " + bookDetailFragment.book.title );
+                             Log.d("log_tag", "Portrait3: " + bookDetailFragment.book.getTitle() );
 
                              Book original_book = bookDetailFragment.book;
                              new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                                  @Override
                                  public void run() {
-                                     Log.d("log_tag", "Portrait4: " + original_book.title );
+                                     Log.d("log_tag", "Portrait4: " + original_book.getTitle() );
                                      bookDetailFragment.displayBook(original_book);
                                  }
                              }, 50);
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                             .commitNow();
                 }
 
-                Toast.makeText(this, ""+bookDetailFragment.book.title, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, ""+bookDetailFragment.book.getTitle(), Toast.LENGTH_SHORT).show();
             }
 
         }
