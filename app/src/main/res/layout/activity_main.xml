@@ -6,21 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
         android:id="@+id/SearchButton"
-        android:layout_width="392dp"
-        android:layout_height="51dp"
-        android:layout_marginBottom="5dp"
-        android:contextClickable="true"
-        android:text="Search..."
-        android:textAlignment="center"
-        android:textColor="#03A9F4"
-        android:textSize="36sp"
+        android:layout_width="391dp"
+        android:layout_height="58dp"
+        android:text="@string/search"
+        android:textSize="10sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Search..." />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/container"

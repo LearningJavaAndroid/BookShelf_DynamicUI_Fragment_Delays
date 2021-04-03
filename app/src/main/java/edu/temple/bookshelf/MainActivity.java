@@ -5,12 +5,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     BookDetailFragment bookDetailFragment;
     Boolean container2present;
     BookListFragment bookListFragment;
-    TextView Search;
+    Button Search;
     int layoutStateBefore = 1; // 1 for portrait, 2 for landscape
     int[] images;
 
@@ -37,8 +40,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         setContentView(R.layout.activity_main);
         Search = findViewById(R.id.SearchButton);
         container2present = findViewById(R.id.container2) != null;
-        //images = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10,};
 
+        Search.setPadding(0,0,0,1);
+        Search.setBackgroundColor(getResources().getColor(R.color.purple_500));
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +150,15 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
 
         }
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+//        ActionBar actionBar = getActionBar();
+//        actionBar.hide();
+
 
     }
     @Override

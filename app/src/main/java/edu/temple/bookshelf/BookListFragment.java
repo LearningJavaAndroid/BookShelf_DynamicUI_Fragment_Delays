@@ -110,7 +110,6 @@ public class BookListFragment extends Fragment implements Parcelable{
 
         view.setAdapter(new BookAdapter(getActivity(), bookList));
 
-
         view.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id){
