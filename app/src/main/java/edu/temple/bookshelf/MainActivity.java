@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                     if(bookDetailFragment != null){ //if bookDetail is not null, there is one data saved, it could still be blank
                         if(bookDetailFragment.setRescources){
                             Log.d("log_tag", "line 61:");
-                            Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.getAuthor(), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(this, "rotate itemClicked: "+bookDetailFragment.book.getAuthor(), Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().popBackStackImmediate();
                             getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.container2,bookDetailFragment)
@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                              }, 50);
                          }else{
                              Log.d("log_tag", "line 124:");
-                             Toast.makeText(this, "line: 123", Toast.LENGTH_SHORT).show();
+                             //Toast.makeText(this, "line: 123", Toast.LENGTH_SHORT).show();
                              getSupportFragmentManager().beginTransaction()
                                      .replace(R.id.container, bookListFragment)
                                      .commit();
