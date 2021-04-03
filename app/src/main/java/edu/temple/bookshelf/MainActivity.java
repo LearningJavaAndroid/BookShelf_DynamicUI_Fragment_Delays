@@ -32,8 +32,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Search = findViewById(R.id.searchButton);
+        Search = findViewById(R.id.SearchButton);
         container2present = findViewById(R.id.container2) != null;
+        images = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10,};
 
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
         if(savedInstanceState == null){ // if the app first load
             list = new BookList(); //initialize everything
-
+            createBooklists();
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, bookListFragment = BookListFragment.newInstance(list))
@@ -210,6 +211,21 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 Toast.makeText(this, ""+bookDetailFragment.book.title, Toast.LENGTH_SHORT).show();
             }
 
+        }
+
+    }
+    public void createBooklists() { // initialize data
+
+        //all arrays are 10 in size/length
+        //BookList list = new BookList();
+        String[] BookName = getResources().getStringArray(R.array.Book);
+        String[] BookAuthor = getResources().getStringArray(R.array.Author);
+
+        int i = 0;
+        while (i < getResources().getStringArray(R.array.Author).length) {
+            Book book = new Book(BookName[i], BookAuthor[i], images[i]);
+            list.add(book);
+            i++;
         }
 
     }

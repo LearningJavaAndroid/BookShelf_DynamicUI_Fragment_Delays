@@ -8,9 +8,11 @@
 
     <TextView
         android:id="@+id/SearchButton"
-        android:layout_width="394dp"
-        android:layout_height="43dp"
+        android:layout_width="392dp"
+        android:layout_height="51dp"
         android:layout_marginBottom="5dp"
+        android:contextClickable="true"
+        android:text="Search..."
         android:textAlignment="center"
         android:textColor="#03A9F4"
         android:textSize="36sp"

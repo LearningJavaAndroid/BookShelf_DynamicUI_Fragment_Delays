@@ -6,5 +6,28 @@
     <string name="button">Search...</string>
     <string name="name"></string>
     <string name="button2">Cancel</string>
-
+    <string-array name="Book">
+        <item>Dog Man Mothering Heights</item>
+        <item>Its Not Easy Being A Bunny</item>
+        <item>Biscuit Pet and Play Easter</item>
+        <item>The Women of the Bible Speak</item>
+        <item>I love you to the Moon and Back</item>
+        <item>If Animals Kissed Good Night</item>
+        <item>Little Blue Trucks SpringTime</item>
+        <item>Atomic Habits</item>
+        <item>How to Do The Work</item>
+        <item>How to catch the Easter Bunny</item>
+    </string-array>
+    <string-array name="Author">
+        <item>Dav Pilkey</item>
+        <item>Marilyn Sadler</item>
+        <item>Alyssa Satin Capucilli</item>
+        <item>Shannon Bream</item>
+        <item>Amelia HepWorth</item>
+        <item>Ann WhitFord Paul</item>
+        <item>Alice Schertle</item>
+        <item>James Clear</item>
+        <item>Dr.Nicole Lepera</item>
+        <item>Adam Wallace</item>
+    </string-array>
 </resources>

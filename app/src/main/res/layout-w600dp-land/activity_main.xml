@@ -10,6 +10,7 @@
         android:id="@+id/SearchButton"
         android:layout_width="247dp"
         android:layout_height="36dp"
+        android:text="Search..."
         android:textAlignment="center"
         android:textColor="#03A9F4"
         android:textSize="30sp"
