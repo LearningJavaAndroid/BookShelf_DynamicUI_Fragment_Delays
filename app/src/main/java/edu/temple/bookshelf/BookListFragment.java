@@ -88,7 +88,7 @@ public class BookListFragment extends Fragment implements Parcelable{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if((savedInstanceState == null) && (getArguments() != null)){
-                this.bookList.bookList =  getArguments().getParcelableArrayList("list");
+            this.bookList.bookList =  getArguments().getParcelableArrayList("list");
         }else{
             if(getArguments() != null){
                 this.bookList.bookList = savedInstanceState.getParcelableArrayList("list");

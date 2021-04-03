@@ -177,19 +177,5 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         }
 
     }
-//    public void createBooklists() { // initialize data
-//
-//        //all arrays are 10 in size/length
-//        //BookList list = new BookList();
-//        String[] BookName = getResources().getStringArray(R.array.Book);
-//        String[] BookAuthor = getResources().getStringArray(R.array.Author);
-//
-//        int i = 0;
-//        while (i < getResources().getStringArray(R.array.Author).length) {
-//            Book book = new Book(BookName[i], BookAuthor[i], images[i]);
-//            list.add(book);
-//            i++;
-//        }
-//
-//    }
+
 }
