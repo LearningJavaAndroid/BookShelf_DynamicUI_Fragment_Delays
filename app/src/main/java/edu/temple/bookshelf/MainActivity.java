@@ -154,19 +154,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         if(data != null){
             if (requestCode == 111 && resultCode == RESULT_OK) {
                 Bundle bundle = data.getBundleExtra("BUNDLE");
-                ArrayList<Book> objects = bundle.getParcelableArrayList("Objects");
-
-
+                list = bundle.getParcelable("Objects");
 
             }
         }
 
-
-    }
-    public void LoadImage(String newURL) throws MalformedURLException {
-
-        Log.d("String", "loadImage: 91 " + newURL);
-        //Picasso.get().load(newURL).into(comicImageView);
 
     }
 
@@ -215,20 +207,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         }
 
     }
-    public void createBooklists() { // initialize data
 
-        //all arrays are 10 in size/length
-        //BookList list = new BookList();
-        String[] BookName = getResources().getStringArray(R.array.Book);
-        String[] BookAuthor = getResources().getStringArray(R.array.Author);
-
-        int i = 0;
-        while (i < getResources().getStringArray(R.array.Author).length) {
-            Book book = new Book(BookName[i], BookAuthor[i], images[i]);
-            list.add(book);
-            i++;
-        }
-
-    }
 
 }

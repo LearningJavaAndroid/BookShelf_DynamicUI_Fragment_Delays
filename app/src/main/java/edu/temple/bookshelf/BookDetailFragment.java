@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import edu.temple.bookshelf.R;
@@ -134,7 +136,7 @@ public class BookDetailFragment extends Fragment implements Parcelable {
         this.book = Book;
         textViewBook.setGravity(View.TEXT_ALIGNMENT_CENTER);
         textViewAuthor.setGravity(View.TEXT_ALIGNMENT_CENTER);
-        imageView.setImageResource(Book.getImage());
+        Picasso.get().load(book.getURL()).into(imageView);
         textViewBook.setText(Book.getTitle());
         textViewAuthor.setText(Book.getAuthor());
         textViewBook.setTextSize(30);

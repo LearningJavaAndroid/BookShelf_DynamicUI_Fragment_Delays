@@ -36,16 +36,16 @@ public class BookSearchActivity extends Activity { //make sure to get rid of app
 
             Bundle bundle;
             try {
-
+                BookList bookList = new BookList();
                 JSONArray jsonArray = new JSONArray((String)msg.obj); // json array of json objects
-                ArrayList<Book> objects = new ArrayList<Book>();
+                //ArrayList<Book> objects = new ArrayList<Book>();
                 bundle= new Bundle();
                 for(int i =0; i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     Book book = new Book(jsonObject.getString("cover_url"), jsonObject.getString("title"),jsonObject.getString("author"),jsonObject.getInt("id"));
-                    objects.add(book);
+                    bookList.add(book);
                 }
-                bundle.putParcelableArrayList("Objects", objects); // might now work here
+                bundle.putParcelable("Objects", bookList); // might now work here
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("BUNDLE",bundle);
