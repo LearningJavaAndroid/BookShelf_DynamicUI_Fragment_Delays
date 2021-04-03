@@ -1,15 +1,20 @@
 package edu.temple.bookshelf;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.MalformedURLException;
 import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface, BookDetailFragment.ItemDetailFragmentInterface{
 
@@ -17,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     BookDetailFragment bookDetailFragment;
     Boolean container2present;
     BookListFragment bookListFragment;
-    //Book book;
+    TextView Search;
     int layoutStateBefore = 1; // 1 for portrait, 2 for landscape
     int[] images;
 
@@ -27,12 +32,20 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Search = findViewById(R.id.searchButton);
         container2present = findViewById(R.id.container2) != null;
+
+        Search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent launchIntent = new Intent(MainActivity.this, BookSearchActivity.class);
+                startActivityForResult(launchIntent, 111);
+            }
+        });
 
         if(savedInstanceState == null){ // if the app first load
             list = new BookList(); //initialize everything
-            //createBooklists();
+
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, bookListFragment = BookListFragment.newInstance(list))
@@ -129,6 +142,29 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
 
         }
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { //on return from activity/ custom dialog
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 111 && resultCode == RESULT_OK) {
+            Bundle bundle = data.getBundleExtra("BUNDLE");
+            try {
+                LoadImage(bundle.getString("cover_url"));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            //Author.setText(bundle.getString("author"));
+            //titleTextView.setText(bundle.getString("title"));
+
+        }
+
+    }
+    public void LoadImage(String newURL) throws MalformedURLException {
+
+        Log.d("String", "loadImage: 91 " + newURL);
+        //Picasso.get().load(newURL).into(comicImageView);
 
     }
 
