@@ -155,6 +155,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             if (requestCode == 111 && resultCode == RESULT_OK) {
                 Bundle bundle = data.getBundleExtra("BUNDLE");
                 list = bundle.getParcelable("Objects");
+                Log.d("log_tag", "OnactivityResult: 158: size: "+list.sizeBookList());
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, bookListFragment = BookListFragment.newInstance(list))
+                        .commit();
 
             }
         }
