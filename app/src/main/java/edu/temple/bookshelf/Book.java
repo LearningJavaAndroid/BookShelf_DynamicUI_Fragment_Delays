@@ -8,28 +8,29 @@ import java.io.Serializable;
 public class Book implements Parcelable{
 
     private int id;
-    //int image;
     private String coverURL;
     private String title;
     private String author;
+    private int duration;
 
     public Book(){ }
 
 
-    public Book(String newURL,String title,String author, int id){
+    public Book(String newURL,String title,String author, int id, int duration){
         this.id = id;
         this.coverURL = newURL;
         this.title = title;
         this.author = author;
-        //this.image = image;
+        this.duration = duration;
     }
+
 
     protected Book(Parcel in) {
         id = in.readInt();
-        //image = in.readInt();
         coverURL = in.readString();
         title = in.readString();
         author = in.readString();
+        duration = in.readInt();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -60,6 +61,11 @@ public class Book implements Parcelable{
         return this.author;
     }
 
+    public int getDuration(){return this.duration;}
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
     @Override
     public int describeContents() {
@@ -69,9 +75,9 @@ public class Book implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        //dest.writeInt(image);
         dest.writeString(coverURL);
         dest.writeString(title);
         dest.writeString(author);
+        dest.writeInt(duration);
     }
 }
