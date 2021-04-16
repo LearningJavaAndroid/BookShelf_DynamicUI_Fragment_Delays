@@ -7,6 +7,9 @@
     <string name="name"></string>
     <string name="button2">Cancel</string>
     <string name="search">Search...</string>
+    <string name="todo">TODO</string>
+    <string name="todo">TODO</string>
+    <string name="todo">TODO</string>
     <string-array name="Book">
         <item>Dog Man Mothering Heights</item>
         <item>Its Not Easy Being A Bunny</item>
