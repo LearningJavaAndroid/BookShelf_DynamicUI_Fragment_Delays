@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SearchButton"></FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/seekBar2" />
 
     <FrameLayout
         android:id="@+id/container2"
@@ -30,7 +30,43 @@
         android:text="@string/search"
         android:textSize="10sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="33dp"
+        android:layout_height="31dp"
+        app:layout_constraintEnd_toStartOf="@+id/stopButton"
+        app:layout_constraintStart_toEndOf="@+id/pauseButton"
+        app:layout_constraintTop_toBottomOf="@+id/SearchButton"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <ImageButton
+        android:id="@+id/pauseButton"
+        android:layout_width="35dp"
+        android:layout_height="31dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playButton"
+        app:layout_constraintStart_toStartOf="@+id/seekBar2"
+        app:layout_constraintTop_toTopOf="@+id/playButton"
+        app:srcCompat="@android:drawable/ic_media_pause" />
+
+    <ImageButton
+        android:id="@+id/stopButton"
+        android:layout_width="38dp"
+        android:layout_height="31dp"
+        app:layout_constraintBottom_toBottomOf="@+id/playButton"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar2"
+        app:layout_constraintTop_toBottomOf="@+id/SearchButton"
+        app:srcCompat="@android:drawable/ic_menu_slideshow" />
+
+    <SeekBar
+        android:id="@+id/seekBar2"
+        android:layout_width="184dp"
+        android:layout_height="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/container2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/playButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
