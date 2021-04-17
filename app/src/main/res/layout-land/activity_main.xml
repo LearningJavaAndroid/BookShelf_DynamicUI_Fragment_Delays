@@ -9,15 +9,14 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="184dp"
-        android:layout_height="269dp"
-        android:layout_marginTop="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SearchButton"></FrameLayout>
 
     <FrameLayout
         android:id="@+id/container2"
-        android:layout_width="345dp"
+        android:layout_width="0dp"
         android:layout_height="320dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
