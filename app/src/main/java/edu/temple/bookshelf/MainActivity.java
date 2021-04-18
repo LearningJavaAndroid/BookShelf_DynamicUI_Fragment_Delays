@@ -100,8 +100,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         pauseButton = findViewById(R.id.pauseButton);
         stopButton = findViewById(R.id.stopButton);
         seekBar = findViewById(R.id.seekBar);
-        container2present = findViewById(R.id.container2) != null;
 
+        container2present = findViewById(R.id.container2) != null;
+        seekBar.setMax(100);
         Search.setPadding(0,0,0,1);
         Search.setBackgroundColor(getResources().getColor(R.color.purple_500));
         Search.setOnClickListener(new View.OnClickListener() {
