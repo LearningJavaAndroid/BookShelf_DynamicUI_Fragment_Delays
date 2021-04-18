@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     ImageButton stopButton;
     SeekBar seekBar;
     Intent serviceIntent;
+    AudiobookService.BookProgress progress;
     IntentFilter intentFilter;
 
     AudiobookService.MediaControlBinder mediaControlBinder = null;
@@ -55,9 +56,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     Handler mProgressHandler = new Handler() {
 
         @Override
-        public void handleMessage(Message msg) {
-            AudiobookService.BookProgress progress = (AudiobookService.BookProgress) msg.obj;
-
+        public void handleMessage(Message msg) { //setting the seekbar
+            progress = (AudiobookService.BookProgress) msg.obj;
             int percent = progress.getProgress();
             seekBar.setProgress(percent);
             Log.d("mediaControlBinder", "setProgressHandler - " + percent);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         }
     };
 
-    ServiceConnection serviceConnection = new ServiceConnection() {
+    ServiceConnection serviceConnection = new ServiceConnection() { //set service connection
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mediaControlBinder = (AudiobookService.MediaControlBinder) service;
@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         pauseButton = findViewById(R.id.pauseButton);
         stopButton = findViewById(R.id.stopButton);
         seekBar = findViewById(R.id.seekBar);
-        seekBar.setMax(100);
         container2present = findViewById(R.id.container2) != null;
 
         Search.setPadding(0,0,0,1);
@@ -118,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             public void onClick(View v) {
                 if( mediaControlBinder != null && book != null )
                 {
+                    seekBar.setMax(book.getDuration());
                     mediaControlBinder.play(book.getID());
                 }
             }
@@ -300,7 +300,25 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     @Override
     public void itemClicked(int position) {// onclick to manipulate bookdetailFragment
+        int duration = 0;
+        if(position == 1){
+            duration = 73560;
+
+        }else if(position == 2){
+            duration = 16798;
+        }else if(position == 3){
+            duration = 15213;
+        }else if(position == 4){
+            duration = 30230;
+        }else if(position == 5){
+            duration = 11977;
+        }else if(position == 6){
+            duration = 47204;
+        }else{
+            duration = 61274;
+        }
         book = list.getBook(position);
+        book.setDuration(duration);
 
          if (!container2present) { // if its portrait, keep making them replacing fragments
             getSupportFragmentManager().beginTransaction()
