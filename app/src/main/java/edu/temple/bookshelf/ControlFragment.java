@@ -13,11 +13,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ControlFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ControlFragment extends Fragment {
 
     private ControlInterface parentActivity;
@@ -41,23 +37,21 @@ public class ControlFragment extends Fragment {
         }
     }
 
-    public static ControlFragment newInstance(String param1, String param2) {
+    public static ControlFragment newInstance() {
         ControlFragment fragment = new ControlFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-        if(savedInstanceState != null){
-
-        }
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//
+//        }
+//        if(savedInstanceState != null){
+//
+//        }
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

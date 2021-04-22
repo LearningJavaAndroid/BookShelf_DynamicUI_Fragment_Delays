@@ -13,7 +13,8 @@
         android:layout_marginStart="56dp"
         android:src="@android:drawable/ic_media_play"
         app:layout_constraintStart_toEndOf="@+id/pauseButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/pauseButton"
@@ -22,7 +23,8 @@
         android:layout_marginStart="56dp"
         android:src="@android:drawable/ic_media_pause"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <ImageButton
         android:id="@+id/stopButton"
@@ -32,7 +34,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toEndOf="@+id/playButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="TODO" />
 
     <SeekBar
         android:id="@+id/seekBar"

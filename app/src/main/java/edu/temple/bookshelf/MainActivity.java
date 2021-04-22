@@ -113,11 +113,12 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container, bookListFragment = BookListFragment.newInstance(list))
+                    .add(R.id.container3, controlFragment = ControlFragment.newInstance())
                     .commit();
+
             if(container2present){ //if landscape just make empty detail frag once
 
                     bookDetailFragment = new BookDetailFragment();
-
                     getSupportFragmentManager().beginTransaction()
                             .add(R.id.container2, bookDetailFragment)
                             .hide(bookDetailFragment)
