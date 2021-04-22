@@ -1,4 +1,3 @@
-include ':audiobook-player (1)'
 include ':audiobook-player'
+rootProject.name='BookShelf'
 include ':app'
-rootProject.name = "BookShelf"

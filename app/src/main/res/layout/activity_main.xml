@@ -4,40 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:textAlignment="center"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/SearchButton"
+    <FrameLayout
+        android:id="@+id/control_container"
         android:layout_width="0dp"
-        android:layout_height="75dp"
-        android:text="@string/search"
-        android:textSize="10sp"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/searchDialogButton">
+
+    </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/container_1"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container3">
+        app:layout_constraintTop_toBottomOf="@+id/control_container">
 
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/container3"
+    <ImageButton
+        android:id="@+id/searchDialogButton"
         android:layout_width="0dp"
-        android:layout_height="165dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SearchButton">
-
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
