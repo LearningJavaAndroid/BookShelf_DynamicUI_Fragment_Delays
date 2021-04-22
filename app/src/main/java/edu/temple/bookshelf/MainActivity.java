@@ -55,12 +55,17 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     Handler mProgressHandler = new Handler() {
 
+        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(Message msg) { //setting the seekbar
             progress = (AudiobookService.BookProgress) msg.obj;
-            int percent = progress.getProgress();
-            seekBar.setProgress(percent);
-            Log.d("mediaControlBinder", "setProgressHandler - " + percent);
+            double percent = book.getDuration()/1000; // get percent transfer
+            int finalPer = (int) Math.ceil(percent);
+            int curProg = progress.getProgress();
+            if((curProg >= finalPer) && (curProg % finalPer == 0)){
+                seekBar.setProgress(seekBar.getProgress()+1);
+            }
+            Log.d("mediaControlBinder", "setProgressHandler - " + seekBar.getProgress());
 
         }
     };
@@ -102,8 +107,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         seekBar = findViewById(R.id.seekBar);
 
         container2present = findViewById(R.id.container2) != null;
-        seekBar.setMax(100);
-        Search.setPadding(0,0,0,1);
+
+        seekBar.setMax(1000);
+//        Search.setPadding(0,0,0,1);
         Search.setBackgroundColor(getResources().getColor(R.color.purple_500));
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +124,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             public void onClick(View v) {
                 if( mediaControlBinder != null && book != null )
                 {
-                    seekBar.setMax(book.getDuration());
                     mediaControlBinder.play(book.getID());
                 }
             }
@@ -139,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             }
         });
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() { //seekbar listener
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
@@ -152,8 +157,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                if( mediaControlBinder != null )
+                if( mediaControlBinder != null ){
                     mediaControlBinder.seekTo(seekBar.getProgress());
+                }
             }
         });
 
@@ -278,6 +284,26 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             if (requestCode == 111 && resultCode == RESULT_OK) {
                 Bundle bundle = data.getBundleExtra("BUNDLE");
                 list = bundle.getParcelable("Objects");
+                int i = 0;
+                while(i < list.sizeBookList()){
+                    int id = list.getBook(i).getID();
+                    if(id == 1){
+                        list.getBook(i).setDuration(73560);
+                    }else if(id == 2){
+                        list.getBook(i).setDuration(16798);
+                    }else if(id == 3){
+                        list.getBook(i).setDuration(15213);
+                    }else if(id == 4){
+                        list.getBook(i).setDuration(30230);
+                    }else if(id == 5){
+                        list.getBook(i).setDuration(11977);
+                    }else if(id == 6){
+                        list.getBook(i).setDuration(47204);
+                    }else{
+                        list.getBook(i).setDuration(61274);
+                    }
+                    i++;
+                }
                 Log.d("log_tag", "OnactivityResult: 158: size: "+list.sizeBookList());
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -301,25 +327,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     @Override
     public void itemClicked(int position) {// onclick to manipulate bookdetailFragment
-        int duration = 0;
-        if(position == 1){
-            duration = 73560;
 
-        }else if(position == 2){
-            duration = 16798;
-        }else if(position == 3){
-            duration = 15213;
-        }else if(position == 4){
-            duration = 30230;
-        }else if(position == 5){
-            duration = 11977;
-        }else if(position == 6){
-            duration = 47204;
-        }else{
-            duration = 61274;
-        }
         book = list.getBook(position);
-        book.setDuration(duration);
 
          if (!container2present) { // if its portrait, keep making them replacing fragments
             getSupportFragmentManager().beginTransaction()
