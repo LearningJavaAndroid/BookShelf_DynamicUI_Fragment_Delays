@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -52,21 +53,19 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     AudiobookService.BookProgress progress;
     int finalPer = 0;
     IntentFilter intentFilter;
-
+    private boolean serviceConnected;
     AudiobookService.MediaControlBinder mediaControlBinder = null;
 
     Handler mProgressHandler = new Handler() {
-
-        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(Message msg) { //setting the seekbar
             progress = (AudiobookService.BookProgress) msg.obj;
             int curProg = progress.getProgress();
+            Uri media = progress.getBookUri();
             if((curProg >= finalPer) && (curProg % finalPer == 0)){
-                seekBar.setProgress(seekBar.getProgress()+1);
+                seekBar.setProgress(seekBar.getProgress());
             }
             Log.d("mediaControlBinder", "setProgressHandler - " + seekBar.getProgress() + " finalPer: "+finalPer + " TotalDuration: "+book.getDuration() + " RealTime: " + progress.getProgress());
-
         }
     };
 
@@ -75,15 +74,15 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         public void onServiceConnected(ComponentName name, IBinder service) {
             mediaControlBinder = (AudiobookService.MediaControlBinder) service;
             Log.d("mediaControlBinder", "onServiceConnected");
-
             mediaControlBinder.setProgressHandler(mProgressHandler);
+            serviceConnected = true;
 
 
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mediaControlBinder = null;
+            serviceConnected = false;
             Log.d("mediaControlBinder", "onServiceDisconnected");
         }
     };
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         textView = findViewById(R.id.textView);
         container2present = findViewById(R.id.container2) != null;
 
-        seekBar.setMax(1000);
+
 //        Search.setPadding(0,0,0,1);
         Search.setBackgroundColor(getResources().getColor(R.color.purple_500));
         Search.setOnClickListener(new View.OnClickListener() {
@@ -161,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if( mediaControlBinder != null ){
-                    int time = seekBar.getProgress()*finalPer;
-                    mediaControlBinder.seekTo(time);
-                    Log.d("mediaControlBinder", "setting progress - " + time);
+//                    int time = seekBar.getProgress();
+                    mediaControlBinder.seekTo(seekBar.getProgress());
+                    Log.d("mediaControlBinder", "setting progress - " + seekBar.getProgress());
                 }
             }
         });
@@ -207,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                                     Log.d("log_tag", "Portrait4: " + original_book.getTitle() );
                                     bookDetailFragment.displayBook(original_book);
                                 }
-                            }, 100);
+                            }, 50);
 
                         }else{
                             Log.d("log_tag", "line 77:");
@@ -293,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
                 while(i < list.sizeBookList()){
                     int id = list.getBook(i).getID();
                     if(id == 1){
-                        list.getBook(i).setDuration(73560);
+                        list.getBook(i).setDuration(765000);
                     }else if(id == 2){
                         list.getBook(i).setDuration(16798);
                     }else if(id == 3){
@@ -334,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     public void itemClicked(int position) {// onclick to manipulate bookdetailFragment
 
         book = list.getBook(position);
+        seekBar.setMax(book.getDuration());
 
          if (!container2present) { // if its portrait, keep making them replacing fragments
             getSupportFragmentManager().beginTransaction()

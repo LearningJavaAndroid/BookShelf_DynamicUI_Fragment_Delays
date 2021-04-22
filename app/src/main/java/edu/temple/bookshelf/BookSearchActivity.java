@@ -42,7 +42,7 @@ public class BookSearchActivity extends Activity { //make sure to get rid of app
                 bundle= new Bundle();
                 for(int i =0; i<jsonArray.length();i++){
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    Book book = new Book(jsonObject.getString("cover_url"), jsonObject.getString("title"),jsonObject.getString("author"),jsonObject.getInt("id"));
+                    Book book = new Book(jsonObject.getString("cover_url"), jsonObject.getString("title"),jsonObject.getString("author"),jsonObject.getInt("id"), jsonObject.getInt("duration"));
                     bookList.add(book);
                 }
                 bundle.putParcelable("Objects", bookList); // might now work here
