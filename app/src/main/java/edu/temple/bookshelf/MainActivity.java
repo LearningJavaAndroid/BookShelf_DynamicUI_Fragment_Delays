@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     ImageButton playButton;
     ImageButton pauseButton;
     ImageButton stopButton;
+    TextView textView;
     SeekBar seekBar;
     Intent serviceIntent;
     AudiobookService.BookProgress progress;
+    int finalPer = 0;
     IntentFilter intentFilter;
 
     AudiobookService.MediaControlBinder mediaControlBinder = null;
@@ -59,13 +61,11 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         @Override
         public void handleMessage(Message msg) { //setting the seekbar
             progress = (AudiobookService.BookProgress) msg.obj;
-            double percent = book.getDuration()/1000; // get percent transfer
-            int finalPer = (int) Math.ceil(percent);
             int curProg = progress.getProgress();
             if((curProg >= finalPer) && (curProg % finalPer == 0)){
                 seekBar.setProgress(seekBar.getProgress()+1);
             }
-            Log.d("mediaControlBinder", "setProgressHandler - " + seekBar.getProgress());
+            Log.d("mediaControlBinder", "setProgressHandler - " + seekBar.getProgress() + " finalPer: "+finalPer + " TotalDuration: "+book.getDuration() + " RealTime: " + progress.getProgress());
 
         }
     };
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         pauseButton = findViewById(R.id.pauseButton);
         stopButton = findViewById(R.id.stopButton);
         seekBar = findViewById(R.id.seekBar);
-
+        textView = findViewById(R.id.textView);
         container2present = findViewById(R.id.container2) != null;
 
         seekBar.setMax(1000);
@@ -124,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             public void onClick(View v) {
                 if( mediaControlBinder != null && book != null )
                 {
+                    textView.setText("Now Playing: " + book.getTitle());
+                    double percent = book.getDuration()/1000; // get percent transfer
+                    finalPer = (int) Math.ceil(percent);
                     mediaControlBinder.play(book.getID());
                 }
             }
@@ -158,7 +161,9 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if( mediaControlBinder != null ){
-                    mediaControlBinder.seekTo(seekBar.getProgress());
+                    int time = seekBar.getProgress()*finalPer;
+                    mediaControlBinder.seekTo(time);
+                    Log.d("mediaControlBinder", "setting progress - " + time);
                 }
             }
         });
