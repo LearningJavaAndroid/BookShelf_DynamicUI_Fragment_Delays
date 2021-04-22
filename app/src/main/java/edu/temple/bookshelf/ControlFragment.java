@@ -1,12 +1,17 @@
 package edu.temple.bookshelf;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,33 +20,30 @@ import android.view.ViewGroup;
  */
 public class ControlFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private ControlInterface parentActivity;
+    TextView textView;
+    SeekBar seekBar;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ControlFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ControlFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if(context instanceof ControlInterface){
+            parentActivity = (ControlInterface) context;
+
+        }else{
+            throw new RuntimeException("Please Implement ControlFragment.ControlInterface");
+        }
+    }
+
     public static ControlFragment newInstance(String param1, String param2) {
         ControlFragment fragment = new ControlFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,8 +52,10 @@ public class ControlFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
+        }
+        if(savedInstanceState != null){
+
         }
     }
 
@@ -59,6 +63,51 @@ public class ControlFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_control, container, false);
+        View l =  inflater.inflate(R.layout.fragment_control, container, false);
+
+        textView = l.findViewById(R.id.textView);
+        seekBar = l.findViewById(R.id.seekBar);
+        l.findViewById(R.id.playButton).setOnClickListener((view)->{
+            parentActivity.play();
+        });
+        l.findViewById(R.id.pauseButton).setOnClickListener((view)->{
+            parentActivity.pause();
+        });
+        l.findViewById(R.id.stopButton).setOnClickListener((view)->{
+            parentActivity.stop();
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(fromUser){
+                    parentActivity.changePosition(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        return l;
+    }
+
+    public void setNowPlaying(String title){
+        textView.setText(title);
+    }
+    public void updateProgress(int progress){
+        seekBar.setProgress(progress);
+    }
+    interface ControlInterface{
+        void play();
+        void pause();
+        void stop();
+        void changePosition(int progress);
     }
 }

@@ -36,38 +36,51 @@ import java.util.Objects;
 
 import edu.temple.audiobookplayer.AudiobookService;
 
-public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface, BookDetailFragment.ItemDetailFragmentInterface{
+public class MainActivity extends AppCompatActivity implements BookListFragment.ItemListFragmentInterface, BookDetailFragment.ItemDetailFragmentInterface, ControlFragment.ControlInterface{
 
     BookList list;
-    Book book;
+    private Book selectedbook, playingBook;
+
+    private ControlFragment controlFragment;
     BookDetailFragment bookDetailFragment;
-    Boolean container2present;
     BookListFragment bookListFragment;
+
     Button Search;
-    ImageButton playButton;
-    ImageButton pauseButton;
-    ImageButton stopButton;
-    TextView textView;
-    SeekBar seekBar;
+
+    private final String TAG_BOOKLIST = "booklist", TAG_BOOKDETAILS = "bookdetails";
+    private final String KEY_SELECTED_BOOK = "selectedBook", KEY_PLAYING_BOOK = "playingBook";
+    private final String KEY_BOOKLIST = "searchedbook";
+
     Intent serviceIntent;
     AudiobookService.BookProgress progress;
-    int finalPer = 0;
-    IntentFilter intentFilter;
-    private boolean serviceConnected;
     AudiobookService.MediaControlBinder mediaControlBinder = null;
 
-    Handler mProgressHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) { //setting the seekbar
-            progress = (AudiobookService.BookProgress) msg.obj;
-            int curProg = progress.getProgress();
-            Uri media = progress.getBookUri();
-            if((curProg >= finalPer) && (curProg % finalPer == 0)){
-                seekBar.setProgress(seekBar.getProgress());
-            }
-            Log.d("mediaControlBinder", "setProgressHandler - " + seekBar.getProgress() + " finalPer: "+finalPer + " TotalDuration: "+book.getDuration() + " RealTime: " + progress.getProgress());
+    private boolean serviceConnected;
+    Boolean container2present;
+
+
+//    Handler mProgressHandler = new Handler(Looper.getMainLooper() {
+//
+////            progress = (AudiobookService.BookProgress) msg.obj;
+////            int curProg = progress.getProgress();
+////            Uri media = progress.getBookUri();
+////            if((curProg >= finalPer) && (curProg % finalPer == 0)){
+////                seekBar.setProgress(seekBar.getProgress());
+////            }
+//
+//            Log.d("mediaControlBinder", "setProgressHandler - " + seekBar.getProgress() + " finalPer: "+finalPer + " TotalDuration: "+book.getDuration() + " RealTime: " + progress.getProgress());
+//
+//    });
+
+    Handler mProgressHandler = new Handler(Looper.getMainLooper(), (message) ->{
+
+        if(message.obj != null && playingBook != null){
+            controlFragment.updateProgress((int) (((float) ((AudiobookService.BookProgress) message.obj).getProgress()/ playingBook.getDuration()*1000)));
+            controlFragment.setNowPlaying("Now Playing: {playingBook.getTitle()}");
         }
-    };
+
+        return true;
+    });
 
     ServiceConnection serviceConnection = new ServiceConnection() { //set service connection
         @Override
@@ -100,15 +113,14 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Search = findViewById(R.id.SearchButton);
-        playButton = findViewById(R.id.playButton);
-        pauseButton = findViewById(R.id.pauseButton);
-        stopButton = findViewById(R.id.stopButton);
-        seekBar = findViewById(R.id.seekBar);
-        textView = findViewById(R.id.textView);
+//        playButton = findViewById(R.id.playButton);
+//        pauseButton = findViewById(R.id.pauseButton);
+//        stopButton = findViewById(R.id.stopButton);
+//        seekBar = findViewById(R.id.seekBar);
+//        textView = findViewById(R.id.textView);
         container2present = findViewById(R.id.container2) != null;
 
 
-//        Search.setPadding(0,0,0,1);
         Search.setBackgroundColor(getResources().getColor(R.color.purple_500));
         Search.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,26 +300,6 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
             if (requestCode == 111 && resultCode == RESULT_OK) {
                 Bundle bundle = data.getBundleExtra("BUNDLE");
                 list = bundle.getParcelable("Objects");
-                int i = 0;
-                while(i < list.sizeBookList()){
-                    int id = list.getBook(i).getID();
-                    if(id == 1){
-                        list.getBook(i).setDuration(765000);
-                    }else if(id == 2){
-                        list.getBook(i).setDuration(16798);
-                    }else if(id == 3){
-                        list.getBook(i).setDuration(15213);
-                    }else if(id == 4){
-                        list.getBook(i).setDuration(30230);
-                    }else if(id == 5){
-                        list.getBook(i).setDuration(11977);
-                    }else if(id == 6){
-                        list.getBook(i).setDuration(47204);
-                    }else{
-                        list.getBook(i).setDuration(61274);
-                    }
-                    i++;
-                }
                 Log.d("log_tag", "OnactivityResult: 158: size: "+list.sizeBookList());
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -332,8 +324,8 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
     @Override
     public void itemClicked(int position) {// onclick to manipulate bookdetailFragment
 
-        book = list.getBook(position);
-        seekBar.setMax(book.getDuration());
+//        book = list.getBook(position);
+//        seekBar.setMax(book.getDuration());
 
          if (!container2present) { // if its portrait, keep making them replacing fragments
             getSupportFragmentManager().beginTransaction()
@@ -372,23 +364,25 @@ public class MainActivity extends AppCompatActivity implements BookListFragment.
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        registerReceiver(broadcastReceiver, intentFilter);
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-//        unregisterReceiver(broadcastReceiver);
-    }
 
-    @Override
-    public void onDestroy() {
-        stopService(serviceIntent);
-        unbindService(serviceConnection);
-
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+////        registerReceiver(broadcastReceiver, intentFilter);
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+////        unregisterReceiver(broadcastReceiver);
+//    }
+//
+//    @Override
+//    public void onDestroy() {
+//        stopService(serviceIntent);
+//        unbindService(serviceConnection);
+//
+//        super.onDestroy();
+//    }
 }
